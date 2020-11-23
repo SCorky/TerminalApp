@@ -1,0 +1,103 @@
+PROGRAM PLC_PRG
+VAR
+	
+	DOutPuts: BYTE :=0;
+	
+	Buttons : BYTE;
+	Dinputs : BYTE;
+	color: ARRAY[0..7] OF BYTE;
+	status : BOOL;
+	
+	RS1 : SR;
+	RS2 : SR;
+	RS3 : SR;
+	RS4 : SR;
+	RS5 : SR;
+	RS6 : SR;
+	RS7 : SR;
+	RS8 : SR;
+	resetAll: BOOL;
+END_VAR
+
+Buttons := UBRAIN1.bButtons;
+DInputs := UBRAIN1.bDin1;
+status := UBRAIN1.xValidRead;
+status := UBRAIN1.xValidWrite;
+UBRAIN1.bDOut1 := DOutPuts;
+
+color[0] := 0;
+color[1] := 0;
+color[2] := 0;
+color[3] := 0;
+color[4] := 0;
+color[5] := 0;
+color[6] := 0;
+color[7] := 0;
+
+resetAll := EXTRACT(X:=Buttons, N:=0) OR 
+			EXTRACT(X:=Buttons, N:=1) OR  
+			EXTRACT(X:=Buttons, N:=2) OR  
+			EXTRACT(X:=Buttons, N:=3) OR  
+			EXTRACT(X:=Buttons, N:=4) OR  
+			EXTRACT(X:=Buttons, N:=5) OR  
+			EXTRACT(X:=Buttons, N:=6) OR  
+			EXTRACT(X:=Buttons, N:=7) ;  
+RS1(SET1:=EXTRACT(X:=Buttons, N:=0), reset:=resetAll);
+RS2(SET1:=EXTRACT(X:=Buttons, N:=1), reset:=resetAll);
+RS3(SET1:=EXTRACT(X:=Buttons, N:=2), reset:=resetAll);
+RS4(SET1:=EXTRACT(X:=Buttons, N:=3), reset:=resetAll);
+RS5(SET1:=EXTRACT(X:=Buttons, N:=4), reset:=resetAll);
+RS6(SET1:=EXTRACT(X:=Buttons, N:=5), reset:=resetAll);
+RS7(SET1:=EXTRACT(X:=Buttons, N:=6), reset:=resetAll);
+RS8(SET1:=EXTRACT(X:=Buttons, N:=7), reset:=resetAll);
+
+IF(RS1.Q1) THEN
+	color[0] := 2;
+	ELSE
+	color[0] := 0;	
+END_IF
+
+IF(RS2.Q1) THEN
+	color[1] := 2;
+	ELSE
+	color[1] := 0;	
+END_IF
+IF(RS3.Q1) THEN
+	color[2] := 2;
+	ELSE
+	color[2] := 0;	
+END_IF
+IF(RS4.Q1) THEN
+	color[3] := 2;
+	ELSE
+	color[3] := 0;	
+END_IF
+IF(RS5.Q1) THEN
+	color[4] := 2;
+	ELSE
+	color[4] := 0;	
+END_IF
+IF(RS6.Q1) THEN
+	color[5] := 2;
+	ELSE
+	color[5] := 0;	
+END_IF
+IF(RS7.Q1) THEN
+	color[6] := 2;
+	ELSE
+	color[6] := 0;	
+END_IF
+IF(RS8.Q1) THEN
+	color[7] := 2;
+	ELSE
+	color[7] := 0;	
+END_IF
+
+UBRAIN1.bColorButton[0] := color[0];
+UBRAIN1.bColorButton[1] := color[1];
+UBRAIN1.bColorButton[2] := color[2];
+UBRAIN1.bColorButton[3] := color[3];
+UBRAIN1.bColorButton[4] := color[4];
+UBRAIN1.bColorButton[5] := color[5];
+UBRAIN1.bColorButton[6] := color[6];
+UBRAIN1.bColorButton[7] := color[7];
